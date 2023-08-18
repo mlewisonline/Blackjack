@@ -1,5 +1,22 @@
 import random
 import time
+import os
+
+# System call
+os.system("")
+
+# Class of different styles
+class style():
+    BLACK = '\033[30m'
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
+    CYAN = '\033[36m'
+    WHITE = '\033[37m'
+    UNDERLINE = '\033[4m'
+    RESET = '\033[0m'
 
 class Card:
     def __init__(self, suit, value, card_value):
@@ -17,7 +34,7 @@ class Deck:
          self.build()
 
     def build(self):
-        suits = ['♥', '♦', '♣', '♠']
+        suits = ['\033[31m♥\033[37m', '\033[31m♦\033[37m', '\33[34m♣\033[37m', '\33[34m♠\033[37m']
         values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
         card_value = {"A": 11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}
         for suit in suits:
@@ -135,16 +152,16 @@ while True:
 
     print("\033c", end="")
     if game.player.busted == True:
-        print(f"Dealer wins!")
+        print(f"🏆 Dealer wins 🏆")
         print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
         print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
     elif game.dealer.score > game.player.score and game.dealer.busted == False:
-        print("Dealer wins!")
+        print("🏆 Dealer wins 🏆")
         print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
         print(f"{game.player.name}:",*game.player.hand, f"Score: {game.player.score}")
     elif game.player.score == 21 or game.player.score > game.dealer.score or game.dealer.busted == True:
-        print(f"{game.player.name} wins!")
+        print("🏆 Player wins 🏆")
         print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
         print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
     
-    time.sleep(5)
+    input("\nPress any key to continue")
