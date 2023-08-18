@@ -11,7 +11,7 @@ class Card:
         return f"{self.value} {self.suit}"
 
 
-class Deck():
+class Deck:
     def __init__(self):
          self.cards=[]
          self.build()
