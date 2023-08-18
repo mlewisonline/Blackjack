@@ -6,7 +6,7 @@ import os
 os.system("")
 
 # Class of different styles
-class style():
+class style:
     BLACK = '\033[30m'
     RED = '\033[31m'
     GREEN = '\033[32m'
@@ -79,6 +79,17 @@ class Game:
         self.deck = Deck()
         self.dealer.shuffle(self.deck)
 
+    def print_title(self):
+        print(f"""{style.YELLOW}
+ ____  _            _        _            _    
+|  _ \| |          | |      | |          | |   
+| |_) | | __ _  ___| | __   | | __ _  ___| | __
+|  _ <| |/ _` |/ __| |/ /   | |/ _` |/ __| |/ /
+| |_) | | (_| | (__|   < |__| | (_| | (__|   < 
+|____/|_|\__,_|\___|_|\_\____/ \__,_|\___|_|\_\
+
+              {style.RESET}""")
+
     def deal_cards(self):
         # Deal a card to the player and then the dealer
         self.player.hand.append(self.dealer.deal(self.deck))
@@ -113,13 +124,14 @@ class Game:
         if self.dealer.score > 21:
             self.dealer.busted = True
 
-while True:
-    game = Game()
+
+while True:  
     print("\033c", end="")
+    game = Game()
+    game.print_title()
     game.deal_cards()
 
     while game.player.busted == False:
-
         print(f"Dealer: ?", game.dealer.hand[1])
         print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
         ans = input("stand or hit or quit? ")
@@ -133,6 +145,7 @@ while True:
 
     print("\033c", end="")
     while game.dealer.busted == False:
+        game.print_title()
         print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
         print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
         time.sleep(1)
@@ -152,6 +165,7 @@ while True:
 
     print("\033c", end="")
     if game.player.busted == True:
+        game.print_title()
         print(f"🏆 Dealer wins 🏆")
         print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
         print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
