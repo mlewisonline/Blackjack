@@ -25,7 +25,7 @@ class Card:
         self.card_value = card_value
 
     def __str__(self):
-        return f"{self.value} {self.suit}"
+        return f"|{self.value} {self.suit}|"
 
 
 class Deck:
@@ -151,7 +151,8 @@ def main():
         while game.player.busted == False:
             game.clear_screen()
             game.print_title()
-            print(f"Dealer: ?", game.dealer.hand[1])
+            print(" 🂱 🂲 🂳 🂴 🂵 🂶 🂷 🂸 🂹 🂺 🂻 🂼 🂾\n")
+            print(f"Dealer: | ? |", game.dealer.hand[1])
             print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
 
             ans = input("Hit, Stand or Quit? ")
@@ -167,21 +168,22 @@ def main():
         while game.dealer.busted == False:
             game.clear_screen()
             game.print_title()
+            print(" 🂱 🂲 🂳 🂴 🂵 🂶 🂷 🂸 🂹 🂺 🂻 🂼 🂾\n")
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
             print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
             time.sleep(1)
 
             if game.player.busted:
-                print("Standing")
+                print("Dealer Stands")
                 time.sleep(2)
                 break
             elif game.dealer.score < 17:
-                print("Hit")
+                print("Dealer Hits")
                 time.sleep(2)
                 game.hit(game.dealer)
             elif game.dealer.score >= 17:
                 game.dealer.stand = True
-                print("Standing")
+                print("Dealer Stands")
                 time.sleep(2)
                 break
 
@@ -189,19 +191,19 @@ def main():
         game.clear_screen()
         game.print_title()
         if game.player.busted == True:
-            print(f"🏆 Dealer wins 🏆")
+            print(f"        🏆 Dealer wins 🏆\n")
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
             print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
         elif game.dealer.score > game.player.score and game.dealer.busted == False:
-            print("🏆 Dealer wins 🏆")
+            print("         🏆 Dealer wins 🏆\n")
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
             print(f"Player:",*game.player.hand, f"Score: {game.player.score}")
         elif game.player.score == 21 or game.player.score > game.dealer.score or game.dealer.busted == True:
-            print("🏆 Player wins 🏆")
+            print("         🏆 Player wins 🏆\n")
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
             print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
         else:
-            print("🏆 Draw 🏆")
+            print("         🏆 Draw 🏆\n")
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
             print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
         
