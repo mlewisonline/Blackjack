@@ -32,7 +32,7 @@ class Deck:
     def __init__(self):
          self.cards=[]
          self.build()
-
+    #  🂱 🂲 🂳 🂴 🂵 🂶 🂷 🂸 🂹 🂺 🂻 🂽 🂾 🂡 🂢 🂣 🂤 🂥 🂦 🂧 🂨 🂩 🂪 🂫 🂭 🂮 🃁 🃂 🃃 🃄 🃅 🃆 🃇 🃈 🃉 🃊 🃋 🃍 🃎 🃑 🃒 🃓 🃔 🃕 🃖 🃗 🃘 🃙 🃚 🃛 🃝 🃞 🂠
     def build(self):
         suits = ['\033[31m♥\033[37m', '\033[31m♦\033[37m', '\33[34m♣\033[37m', '\33[34m♠\033[37m']
         values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
@@ -41,13 +41,14 @@ class Deck:
             for value in values:
                 self.cards.append(Card(suit, value, card_value[value]))
 
-
+    
 class Dealer:
     def __init__(self):
         self.busted = False
         self.stand = False
         self.hand = []
         self.score = 0
+        self.rounds_won = 0
     
     def deal(self, deck :Deck) -> Card:
         return deck.cards.pop()
@@ -66,6 +67,7 @@ class Player:
         self.stand = False
         self.hand = []
         self.score = 0
+        self.rounds_won = 0
 
     def card_count(self) -> int:
         return len(self.hand)
@@ -143,17 +145,18 @@ class Game:
 
 
 def main():
+    dealer_hands_won = 0
+    player_hands_won = 0
     while True:  
-
         game = Game()
         game.deal_cards()
 
         while game.player.busted == False:
             game.clear_screen()
             game.print_title()
-            print(" 🂱 🂲 🂳 🂴 🂵 🂶 🂷 🂸 🂹 🂺 🂻 🂼 🂾\n")
-            print(f"Dealer: | ? |", game.dealer.hand[1])
-            print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
+            print(f"🂱 🂲 🂳 🂴 🂵 🂶 🂷 🂸 🂹 🂺 Dealer:{dealer_hands_won} Player:{player_hands_won}\n")
+            print(f"Dealer: | 🂠 |", game.dealer.hand[1])
+            print(f"Player:",*game.player.hand , f"Score: {game.player.score}\n")
 
             ans = input("Hit, Stand or Quit? ")
             if ans == "hit" or ans == 'h':
@@ -168,9 +171,9 @@ def main():
         while game.dealer.busted == False:
             game.clear_screen()
             game.print_title()
-            print(" 🂱 🂲 🂳 🂴 🂵 🂶 🂷 🂸 🂹 🂺 🂻 🂼 🂾\n")
+            print(f"🂱 🂲 🂳 🂴 🂵 🂶 🂷 🂸 🂹 🂺 Dealer:{dealer_hands_won} Player:{player_hands_won}\n")
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
-            print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
+            print(f"Player:",*game.player.hand , f"Score: {game.player.score}\n")
             time.sleep(1)
 
             if game.player.busted:
@@ -191,14 +194,17 @@ def main():
         game.clear_screen()
         game.print_title()
         if game.player.busted == True:
+            dealer_hands_won += 1
             print(f"        🏆 Dealer wins 🏆\n")
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
             print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
         elif game.dealer.score > game.player.score and game.dealer.busted == False:
+            dealer_hands_won += 1
             print("         🏆 Dealer wins 🏆\n")
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
             print(f"Player:",*game.player.hand, f"Score: {game.player.score}")
         elif game.player.score == 21 or game.player.score > game.dealer.score or game.dealer.busted == True:
+            player_hands_won += 1
             print("         🏆 Player wins 🏆\n")
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
             print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
