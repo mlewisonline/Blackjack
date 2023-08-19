@@ -143,8 +143,9 @@ while True:
         else:
             quit()
 
-    print("\033c", end="")
+    
     while game.dealer.busted == False:
+        print("\033c", end="")
         game.print_title()
         print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
         print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
@@ -164,8 +165,8 @@ while True:
 
 
     print("\033c", end="")
+    game.print_title()
     if game.player.busted == True:
-        game.print_title()
         print(f"🏆 Dealer wins 🏆")
         print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
         print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
