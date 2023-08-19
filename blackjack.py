@@ -61,11 +61,10 @@ class Dealer:
 
 
 class Player:
-    def __init__(self , name):
+    def __init__(self):
         self.busted = False
         self.stand = False
         self.hand = []
-        self.name = name
         self.score = 0
 
     def card_count(self) -> int:
@@ -74,7 +73,7 @@ class Player:
 
 class Game:
     def __init__(self):
-        self.player = Player("Player")
+        self.player = Player()
         self.dealer = Dealer()
         self.deck = Deck()
         self.dealer.shuffle(self.deck)
@@ -87,8 +86,26 @@ class Game:
 |  _ <| |/ _` |/ __| |/ /   | |/ _` |/ __| |/ /
 | |_) | | (_| | (__|   < |__| | (_| | (__|   < 
 |____/|_|\__,_|\___|_|\_\____/ \__,_|\___|_|\_\
+              
+              By Matthew Lewis version 1.0\n{style.RESET}""")
 
-              {style.RESET}""")
+    def clear_screen(self) -> None:
+         # for windows
+        if os.name == 'nt':
+            _ = os.system('cls')
+        # for mac and linux(here, os.name is 'posix')
+        else:
+            _ = os.system('clear')
+
+    def check_two_aces(self, player):
+        if isinstance(player, Player):
+            if self.player.hand[0].card_value == 11 and self.player.hand[1].card_value == 11:
+                self.player.hand[0].card_value = 1
+                self.player.score -=10
+        else:
+            if self.dealer.hand[0].card_value == 11 and self.dealer.hand[1].card_value == 11:
+                self.dealer.hand[0].card_value = 1
+                self.dealer.score -=10
 
     def deal_cards(self):
         # Deal a card to the player and then the dealer
@@ -104,51 +121,54 @@ class Game:
         
 
         # If player dealt two aces lower the vale of one card to one
-        if self.player.card_count() == 2:
-            if self.player.hand[0].card_value == 11 and self.player.hand[1].card_value == 11:
-                self.player.hand[0].card_value = 1
-                self.player.score -=10
+        self.check_two_aces(self.player)
+        self.check_two_aces(self.dealer)
 
 
-    def hit(self):
+
+
+    def hit(self, player):
         card = self.dealer.deal(self.deck)
-        self.player.hand.append(card)
-        self.player.score += card.card_value
-        if self.player.score > 21:
-            self.player.busted = True
+        if isinstance(player, Player):
+            self.player.hand.append(card)
+            self.player.score += card.card_value
+            if self.player.score > 21:
+                self.player.busted = True
+        else:
+            card = self.dealer.deal(self.deck)
+            self.dealer.hand.append(card)
+            self.dealer.score += card.card_value
+            if self.dealer.score > 21:
+                self.dealer.busted = True
 
-    def dealer_hit(self):
-        card = self.dealer.deal(self.deck)
-        self.dealer.hand.append(card)
-        self.dealer.score += card.card_value
-        if self.dealer.score > 21:
-            self.dealer.busted = True
 
 def main():
     while True:  
-        print("\033c", end="")
+
         game = Game()
-        game.print_title()
         game.deal_cards()
 
         while game.player.busted == False:
+            game.clear_screen()
+            game.print_title()
             print(f"Dealer: ?", game.dealer.hand[1])
-            print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
-            ans = input("stand or hit or quit? ")
-            if ans == 'hit':
-                game.hit()
-            elif ans =='stand':
+            print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
+
+            ans = input("Hit, Stand or Quit? ")
+            if ans == "hit" or ans == 'h':
+                game.hit(game.player)
+            elif ans == "stand" or ans == 's':
                 game.player.stand = True
                 break
-            else:
+            elif ans == "quit" or ans == 'q':
                 quit()
 
         
         while game.dealer.busted == False:
-            print("\033c", end="")
+            game.clear_screen()
             game.print_title()
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
-            print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
+            print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
             time.sleep(1)
 
             if game.player.busted:
@@ -158,7 +178,7 @@ def main():
             elif game.dealer.score < 17:
                 print("Hit")
                 time.sleep(2)
-                game.dealer_hit()
+                game.hit(game.dealer)
             elif game.dealer.score >= 17:
                 game.dealer.stand = True
                 print("Standing")
@@ -166,20 +186,24 @@ def main():
                 break
 
 
-        print("\033c", end="")
+        game.clear_screen()
         game.print_title()
         if game.player.busted == True:
             print(f"🏆 Dealer wins 🏆")
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
-            print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
+            print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
         elif game.dealer.score > game.player.score and game.dealer.busted == False:
             print("🏆 Dealer wins 🏆")
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
-            print(f"{game.player.name}:",*game.player.hand, f"Score: {game.player.score}")
+            print(f"Player:",*game.player.hand, f"Score: {game.player.score}")
         elif game.player.score == 21 or game.player.score > game.dealer.score or game.dealer.busted == True:
             print("🏆 Player wins 🏆")
             print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
-            print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
+            print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
+        else:
+            print("🏆 Draw 🏆")
+            print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
+            print(f"Player:",*game.player.hand , f"Score: {game.player.score}")
         
         input("\nPress any key to continue")
 
