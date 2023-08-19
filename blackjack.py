@@ -124,59 +124,64 @@ class Game:
         if self.dealer.score > 21:
             self.dealer.busted = True
 
+def main():
+    while True:  
+        print("\033c", end="")
+        game = Game()
+        game.print_title()
+        game.deal_cards()
 
-while True:  
-    print("\033c", end="")
-    game = Game()
-    game.print_title()
-    game.deal_cards()
+        while game.player.busted == False:
+            print(f"Dealer: ?", game.dealer.hand[1])
+            print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
+            ans = input("stand or hit or quit? ")
+            if ans == 'hit':
+                game.hit()
+            elif ans =='stand':
+                game.player.stand = True
+                break
+            else:
+                quit()
 
-    while game.player.busted == False:
-        print(f"Dealer: ?", game.dealer.hand[1])
-        print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
-        ans = input("stand or hit or quit? ")
-        if ans == 'hit':
-            game.hit()
-        elif ans =='stand':
-            game.player.stand = True
-            break
-        else:
-            quit()
+        
+        while game.dealer.busted == False:
+            print("\033c", end="")
+            game.print_title()
+            print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
+            print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
+            time.sleep(1)
 
-    
-    while game.dealer.busted == False:
+            if game.player.busted:
+                print("Standing")
+                time.sleep(2)
+                break
+            elif game.dealer.score < 17:
+                print("Hit")
+                time.sleep(2)
+                game.dealer_hit()
+            elif game.dealer.score >= 17:
+                game.dealer.stand = True
+                print("Standing")
+                time.sleep(2)
+                break
+
+
         print("\033c", end="")
         game.print_title()
-        print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
-        print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
-        time.sleep(1)
-        print("Thinking: ")
-        time.sleep(2)
-        if game.player.busted:
-            print("Standing")
-            break
-        elif game.dealer.score < 17:
-            print("Hit")
-            game.dealer_hit()
-        elif game.dealer.score >= 17:
-            game.dealer.stand = True
-            print("Standing")
-            break
+        if game.player.busted == True:
+            print(f"🏆 Dealer wins 🏆")
+            print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
+            print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
+        elif game.dealer.score > game.player.score and game.dealer.busted == False:
+            print("🏆 Dealer wins 🏆")
+            print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
+            print(f"{game.player.name}:",*game.player.hand, f"Score: {game.player.score}")
+        elif game.player.score == 21 or game.player.score > game.dealer.score or game.dealer.busted == True:
+            print("🏆 Player wins 🏆")
+            print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
+            print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
+        
+        input("\nPress any key to continue")
 
-
-    print("\033c", end="")
-    game.print_title()
-    if game.player.busted == True:
-        print(f"🏆 Dealer wins 🏆")
-        print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
-        print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
-    elif game.dealer.score > game.player.score and game.dealer.busted == False:
-        print("🏆 Dealer wins 🏆")
-        print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
-        print(f"{game.player.name}:",*game.player.hand, f"Score: {game.player.score}")
-    elif game.player.score == 21 or game.player.score > game.dealer.score or game.dealer.busted == True:
-        print("🏆 Player wins 🏆")
-        print(f"Dealer:",*game.dealer.hand, f"Score: {game.dealer.score}")
-        print(f"{game.player.name}:",*game.player.hand , f"Score: {game.player.score}")
-    
-    input("\nPress any key to continue")
+if __name__ == "__main__":
+    main()
